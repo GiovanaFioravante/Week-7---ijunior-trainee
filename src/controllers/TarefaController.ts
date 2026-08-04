@@ -38,6 +38,64 @@ class TarefaController {
     }
   }
 
+  //buscar uma tarefa pelo id 
+  buscarPorId(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const tarefa = tarefaService.buscarPorId(id);
+
+      //caso nao encontre a tarefa, retorna 404 (Not Found) 
+      if (!tarefa) {
+        return res.status(404).json({ error: 'Tarefa não encontrada' });
+      }
+
+      return res.status(200).json(tarefa);
+    } catch (error) {
+      return res.status(500).json({ error: 'Erro interno ao buscar tarefa' });
+    }
+  }
+
+  //atualiza o conteúdo de uma tarefa 
+  atualizar(req: Request, res: Response) {
+    try {
+    //id da URL e dados do corpo
+      const { id } = req.params;
+      const { title, completed } = req.body;
+
+      //aciona o service para encontrar e atualizar tarefa
+      const tarefaAtualizada = tarefaService.atualizar(id, { title, completed });
+
+      //se o service retornar null, a tarefa não existe
+      if (!tarefaAtualizada) {
+        return res.status(404).json({ error: 'Tarefa não encontrada' });
+      }
+
+      //retorna a tarefa modificada
+      return res.status(200).json(tarefaAtualizada);
+    } catch (error) {
+      return res.status(500).json({ error: 'Erro interno ao atualizar tarefa' });
+    }
+  }
+
+  //remove uma tarefa
+  deletar(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+
+      //service procura o indive e o remove
+      const sucesso = tarefaService.deletar(id);
+
+      //se retornar false, o ID não foi encontrado
+      if (!sucesso) {
+        return res.status(404).json({ error: 'Tarefa não encontrada' });
+      }
+
+      // Status 204 (No Content) confirma que deu certo
+      return res.status(204).send();
+    } catch (error) {
+      return res.status(500).json({ error: 'Erro interno ao deletar tarefa' });
+    }
+  }
 
 }
 
