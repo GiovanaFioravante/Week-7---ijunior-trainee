@@ -41,7 +41,7 @@ class TarefaController {
   //buscar uma tarefa pelo id 
   buscarPorId(req: Request, res: Response) {
     try {
-      const { id } = req.params;
+      const id = req.params.id as string;
       const tarefa = tarefaService.buscarPorId(id);
 
       //caso nao encontre a tarefa, retorna 404 (Not Found) 
@@ -59,7 +59,7 @@ class TarefaController {
   atualizar(req: Request, res: Response) {
     try {
     //id da URL e dados do corpo
-      const { id } = req.params;
+      const id = req.params.id as string;
       const { title, completed } = req.body;
 
       //aciona o service para encontrar e atualizar tarefa
@@ -80,8 +80,7 @@ class TarefaController {
   //remove uma tarefa
   deletar(req: Request, res: Response) {
     try {
-      const { id } = req.params;
-
+      const id = req.params.id as string;
       //service procura o indive e o remove
       const sucesso = tarefaService.deletar(id);
 
